@@ -2,6 +2,7 @@ import networkx as nx
 import random
 import matplotlib.pyplot as plt
 import numpy as np
+import unittest
 
 n = 10 #No. of Nodes in Graph
 
@@ -21,6 +22,43 @@ def customer():
     return C
 
 
+def test_case():
+    G1 = nx.Graph()
+    G2 = nx.Graph()
+    C1 = nx.Graph()
+    C2 = nx.Graph()
+
+    G1.add_edge(0, 1, weight=3)  # Adding Edges and weight
+    G1.add_edge(0, 2, weight=2)
+    G1.add_edge(0, 3, weight=7)
+    G1.add_edge(1, 2, weight=4)
+    G1.add_edge(1, 3, weight=1)
+    G1.add_edge(2, 3, weight=5)
+    C1.add_edge(11,0)
+    G1.node[0]["state"] = 0
+    G1.node[1]["state"] = 1
+    G1.node[2]["state"] = 0
+    G1.node[3]["state"] = 1
+
+
+    G2.add_edge(0, 1, weight=3)  # Adding Edges and weight
+    G2.add_edge(0, 2, weight=2)
+    G2.add_edge(0, 3, weight=7)
+    G2.add_edge(1, 2, weight=4)
+    G2.add_edge(1, 3, weight=1)
+    G2.add_edge(2, 3, weight=5)
+    G2.add_edge(0, 4, weight=6)
+    G2.add_edge(4, 2, weight=8)
+    G2.add_edge(4, 3, weight=9)
+    C2.add_edge(11, 0)
+    G2.node[0]["state"] = 0
+    G2.node[1]["state"] = 0
+    G2.node[2]["state"] = 0
+    G2.node[3]["state"] = 0
+    G2.node[4]["state"] = 1
+
+    return G1,C1,G2,C2
+
 def combine(G,C):
     H = nx.compose(G,C)
     pos = nx.spring_layout(H)
@@ -36,7 +74,8 @@ def combine(G,C):
         labels[i]= r'$A$' + str(i)
     labels[n+1] = r'$C$'
     nx.draw_networkx_labels(H, pos, labels, font_size=12)
-    plt.show()
+    plt.savefig('main.png')
+    #plt.show()
 
 
 def  agent_status(G):
@@ -68,19 +107,19 @@ def random_allot():
     return initial_node
 
 
-def find_avialble_agent(start,G):
+def find_agent(start,G):
     print("Starting Agent:",start)
     initial = start
     if G.node[initial]["state"]==1: #Available
         print("Product Will be Delivered by:", initial)
+        return initial
     elif G.node[initial]["state"]==0: # Not Available
         next = next_node_weight(initial,G)
         G.remove_node(start)
-        find_avialble_agent(next,G)
+        find_agent(next,G)
     else:
         print("Available Agents Do Not Want Go")
         exit(0)
-
 
 def next_node_weight(start,G):
     neighbours= G.neighbors(start)
@@ -98,6 +137,21 @@ def next_node_weight(start,G):
     print("Next Node :",next)
     return next
 
+class test_Case(unittest.TestCase):
+
+    def __init__(self,testname, G):
+        super(test_Case, self).__init__(testname)
+        self.G = G
+    def test_find_agent_G1(self):
+        print("-------------------Case One-------------------")
+        agent = find_agent(3, self.G)
+        self.assertEqual(agent,3)
+
+    def test_find_agent_G2(self):
+        print("-------------------Case Two-------------------")
+        select_available_agent(self.G)
+        agent1 = find_agent(3, self.G)
+        self.assertEquals(agent1,3)
 
 
 #Mention about customer status as well
@@ -109,7 +163,17 @@ def main():
     combine(G,C)
     select_available_agent(G)
     start = random_allot()
-    find_avialble_agent(start,G)
+    find_agent(start,G)
+    print("*************************End of Main**********************")
 
 if __name__ == "__main__":
     main()
+    print("-------------------Testing Data-------------------")
+    G1, C1, G2, C2 = test_case()
+    print(G1.nodes())
+    select_available_agent(G1)
+    suite = unittest.TestSuite()
+
+    suite.addTest(test_Case("test_find_agent_G1", G1))
+    suite.addTest(test_Case("test_find_agent_G2", G2))
+    unittest.TextTestRunner().run(suite)
