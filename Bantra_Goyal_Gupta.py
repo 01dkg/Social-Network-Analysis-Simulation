@@ -73,7 +73,7 @@ def test_case():
     G1.add_edge(1, 2, cost=4)
     G1.add_edge(1, 3, cost=1)
     G1.add_edge(2, 3, cost=5)
-    C1.add_edge(11,0)
+    C1.add_edge(4,0)
     G1.node[0]["state"] = 0
     G1.node[1]["state"] = 0
     G1.node[2]["state"] = 0
@@ -89,7 +89,7 @@ def test_case():
     G2.add_edge(0, 4, cost=6)
     G2.add_edge(4, 2, cost=8)
     G2.add_edge(4, 3, cost=9)
-    C2.add_edge(11, 0)
+    C2.add_edge(5, 0)
     G2.node[0]["state"] = 0
     G2.node[1]["state"] = 0
     G2.node[2]["state"] = 1
@@ -102,12 +102,11 @@ def test_case():
     G3.add_edge(1, 2, cost=4)
     G3.add_edge(1, 3, cost=1)
     G3.add_edge(2, 3, cost=5)
-    C3.add_edge(11, 0)
+    C3.add_edge(4, 0)
     G3.node[0]["state"] = 0
     G3.node[1]["state"] = 0
     G3.node[2]["state"] = 0
     G3.node[3]["state"] = 0
-
     return G1,C1,G2,C2, G3, C3
 
 ####################################################################
@@ -115,10 +114,10 @@ def test_case():
 # that can be displayed al together                                #
 ####################################################################
 
-def combine(G,C):
+def combine(G, C):
     H = nx.compose(G,C)
     pos = nx.spring_layout(H)
-    no_node = len(G)
+    no_node = len(G.nodes())
     nx.draw_networkx_nodes(H, pos, nodelist=[no_node+1], node_color='r', node_size=500, alpha=0.8)
     nx.draw_networkx_nodes(H, pos, nodelist=[0],node_color='g', node_size=500, alpha=0.8)
     nx.draw_networkx_nodes(H, pos, nodelist = range(1,no_node), node_color='b', node_size=500, alpha=0.8)
@@ -262,7 +261,7 @@ def main(G,C,start):
     agent_status(G)
     select_available_agent(G)
     print(G.nodes())
-    combine(G,C)
+    #combine(G, C )
     find_agent(start,G)
     print("-------------------   End of Main   -------------------")
 
