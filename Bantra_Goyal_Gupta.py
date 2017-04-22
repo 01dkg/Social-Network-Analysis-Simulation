@@ -62,8 +62,10 @@ def customer():
 def test_case():
     G1 = nx.Graph()
     G2 = nx.Graph()
+    G3 = nx.Graph()
     C1 = nx.Graph()
     C2 = nx.Graph()
+    C3 = nx.Graph()
 
     G1.add_edge(0, 1, cost=3)  # Adding Edges and cost
     G1.add_edge(0, 2, cost=2)
@@ -94,7 +96,19 @@ def test_case():
     G2.node[3]["state"] = 0
     G2.node[4]["state"] = 0
 
-    return G1,C1,G2,C2
+    G3.add_edge(0, 1, cost=3)  # Adding Edges and cost
+    G3.add_edge(0, 2, cost=2)
+    G3.add_edge(0, 3, cost=7)
+    G3.add_edge(1, 2, cost=4)
+    G3.add_edge(1, 3, cost=1)
+    G3.add_edge(2, 3, cost=5)
+    C3.add_edge(11, 0)
+    G3.node[0]["state"] = 0
+    G3.node[1]["state"] = 0
+    G3.node[2]["state"] = 0
+    G3.node[3]["state"] = 0
+
+    return G1,C1,G2,C2, G3, C3
 
 ####################################################################
 # This function will combine customer and delivery agents graph    #
@@ -147,8 +161,11 @@ def select_available_agent(G):
     for i in G.nodes():
         if G.node[i]["state"]==1:
             agent_available.append(i)
-    del agent_available[0]
-    print("Agent available at the moment", agent_available)
+    if agent_available == []:
+        print("No Delivery Agents are Available")
+    else:
+        del agent_available[0]
+        print("Available Agent are", agent_available)
     return agent_available
 
 ####################################################################
@@ -166,7 +183,7 @@ def random_allot():
 # This function will find the available agent who is available to  #
 # deliver the product to customer                                  #
 #                                                                  #
-# If the first alloted random agent is available then delivery     #
+# If the first allotted random agent is available then delivery    #
 # will be done by first agent but if the agent status is not       #
 # available then it will move nearest next neighbour whose edge    #
 # weight is least and so on until the available agent is found     #
@@ -205,7 +222,7 @@ def next_node_cost(start,G):
     print("Minimum Cost: ",min_cost)
     next= list(W.keys())[list(W.values()).index(min_cost)]
     print("Next Delivery Agent :",next)
-    print("----------------------------------------------------------")
+    print("-----------------------------------------------------")
     return next
 
 class test_Case(unittest.TestCase):
@@ -223,7 +240,7 @@ class test_Case(unittest.TestCase):
         print("Time Taken", round(ttime, 6), " seconds\n")
 
     def test_find_agent_G2(self):
-        print("-------------------  Case Two    -------------------")
+        print("--------------------  Case Two ---------------------")
         print(self.G.nodes())
         sTime = time.clock()
         agent1 = find_agent(3, self.G)
@@ -231,22 +248,23 @@ class test_Case(unittest.TestCase):
         ttime = time.clock() - sTime
         print("Time Taken", round(ttime, 6), " seconds\n")
 
+
+    def test_select_available_agent(self):
+        print("-------------------  Case Three   -------------------")
+        select_available_agent(self.G)
+
 ####################################################################
 # Main function to call the program                                #
 ####################################################################
 
 def main(G,C,start):
-    print("----------------------------------------------------------")
-    print("|                        Start of Main                   |")
-    print("----------------------------------------------------------")
+    print("-------------------  Start of Main  -------------------")
     agent_status(G)
+    select_available_agent(G)
     print(G.nodes())
     combine(G,C)
-    select_available_agent(G)
     find_agent(start,G)
-    print("----------------------------------------------------------")
-    print("|                        End of Main                     |")
-    print("----------------------------------------------------------")
+    print("-------------------   End of Main   -------------------")
 
 if __name__ == "__main__":
 
@@ -255,11 +273,10 @@ if __name__ == "__main__":
     main(agents(),customer(),start)
     ttime = time.clock() - sTime
     print("Time Taken", round(ttime, 6), " seconds\n")
-    print("----------------------------------------------------------")
-    print("|                        Start of Testing                |")
-    print("----------------------------------------------------------")
-    G1, C1, G2, C2 = test_case()
+    print("------------------  Start of Testing ---------------")
+    G1, C1, G2, C2, G3, C3 = test_case()
     suite = unittest.TestSuite()
     suite.addTest(test_Case("test_find_agent_G1", G1))
     suite.addTest(test_Case("test_find_agent_G2", G2))
+    suite.addTest(test_Case("test_select_available_agent", G3))
     unittest.TextTestRunner().run(suite)
