@@ -1,0 +1,82 @@
+C:\Users\Deepak\Anaconda3\python.exe "E:/Smurfit/Semester 2/NSM/NSM_Simulation/Bantra_Goyal_Gupta.py"
+Randomly Assigned Delivery Agent: 5
+-------------------  Start of Main  -------------------
+Available Agent are [3, 6, 8, 9]
+[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+Start Agent: 5
+Source Target Cost
+5 		 1 		 11
+5 		 2 		 34
+5 		 3 		 18
+5 		 4 		 1
+5 		 6 		 33
+5 		 7 		 26
+5 		 8 		 36
+5 		 9 		 8
+Minimum Cost:  1
+Next Delivery Agent : 4
+-----------------------------------------------------
+Start Agent: 4
+Source Target Cost
+4 		 1 		 60
+4 		 2 		 38
+4 		 3 		 60
+4 		 6 		 32
+4 		 7 		 25
+4 		 8 		 42
+4 		 9 		 57
+Minimum Cost:  25
+Next Delivery Agent : 7
+-----------------------------------------------------
+Start Agent: 7
+Source Target Cost
+7 		 1 		 35
+7 		 2 		 41
+7 		 3 		 35
+7 		 6 		 7
+7 		 8 		 17
+7 		 9 		 32
+Minimum Cost:  7
+Next Delivery Agent : 6
+-----------------------------------------------------
+Start Agent: 6
+Product Will be Delivered by Agent: 6
+-------------------   End of Main   -------------------
+Time Taken 0.003383  seconds
+
+------------------  Start of Testing ---------------
+...
+-------------------  Case One    -------------------
+----------------------------------------------------------------------
+[0, 1, 2, 3]
+Ran 3 tests in 0.000s
+Start Agent: 3
+
+OK
+Product Will be Delivered by Agent: 3
+Time Taken 4.3e-05  seconds
+
+--------------------  Case Two ---------------------
+[0, 1, 2, 3, 4]
+Start Agent: 3
+Source Target Cost
+3 		 1 		 1
+3 		 2 		 1
+3 		 4 		 1
+Minimum Cost:  1
+Next Delivery Agent : 1
+-----------------------------------------------------
+Start Agent: 1
+Source Target Cost
+1 		 2 		 1
+Minimum Cost:  1
+Next Delivery Agent : 2
+-----------------------------------------------------
+Start Agent: 2
+Product Will be Delivered by Agent: 2
+Time Taken 0.000288  seconds
+
+-------------------  Case Three   -------------------
+No Delivery Agents are Available
+
+Process finished with exit code 0
